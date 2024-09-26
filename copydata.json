@@ -1,0 +1,40 @@
+{
+    "name":"",
+    "type":"IfCondition",
+    "typeproperties":{
+        "expression":{
+            "value":"@bool(activity('metadataactivity').output.value)",
+            "type":"Expression"
+        }
+    },
+    "ifTrueActivities":[
+        {
+            "name":"copyFromBlob",
+            "type":"copydata",
+            "typeproperties":{
+                "source":{
+                    "type":"BlobSource"
+                },
+                "sink":{
+                    "type":"TabularTranslator"
+                }
+            }
+        }
+    ],
+    "ifFalseActivities":[
+        {
+            "name":"sendmail",
+            "type":"webActivity",
+            "typeproperties":{
+                "url":"logicalendpoint",
+                "method":"POST",
+                "headers":{
+                    "content-type":"Application/JSON"
+                }
+            },
+            "body":{
+                "message":"There is no such type of file with the name"
+            }
+        }
+    ]
+}
